@@ -23,10 +23,10 @@ public class Cased {
 	@JsonIgnore
 	private Engineer engineer;
 	
-	public Integer getnumber() {
+	public Integer getNumber() {
 		return number;
 	}
-	public void setnumber(Integer number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 	public String getIssue() {

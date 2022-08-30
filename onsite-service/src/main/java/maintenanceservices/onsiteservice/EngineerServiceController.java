@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-
+import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 
 
 @RestController
@@ -74,11 +73,28 @@ public class EngineerServiceController {
 				.path("/{id}")
 				.buildAndExpand(savedEngineer.getId())
 				.toUri();  
-		return ResponseEntity.created(location).build();
-		
+		return ResponseEntity.created(location).build();		
 	}
-
 	
+	//POST -Create Cased
+	@PostMapping("/engineers/{id}/cased")
+	public ResponseEntity<List> createCasedForEngineer(@PathVariable int id, @Valid @RequestBody Cased cased) {
+		Optional<Engineer> engineer = engineerRepo.findById(id);
+		
+		if(engineer.isEmpty())
+			throw new EngineerNotFoundException("id:"+ id);
+		
+		cased.setEngineer(engineer.get());
+		
+		Cased savedCased = casedRepo.save(cased);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedCased.getNumber())
+				.toUri(); 
+		
+		return ResponseEntity.created(location).build();
+	}
 	
 	
 	
